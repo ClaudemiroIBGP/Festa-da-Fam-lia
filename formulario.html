@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festa da Família IBGP - 2024</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      background-image: url('caminho/para/sua/imagem.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      /* Adicione outros estilos necessários */
+    }
+    /* Outros estilos CSS para o seu formulário */
+  </style>
+</head>
+<body>
+  <h1>Festa da Família IBGP - 2024</h1>
+  <p>Criança até 5 anos - grátis; Criança de 5 a 10 anos - R$ 30,00; Criança acima de de 10 anos ou Adulto - R$ 60,00</p>
+  
+  <h2>Inscrição:</h2>
+  <form id="registrationForm">
+    <label for="responsibleName">Nome do(a) Responsável:</label>
+    <input type="text" id="responsibleName" name="responsibleName" required>
+    <label for="phoneNumber">Número de Telefone:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" required><br><br>
+
+    <label for="numberOfGuests">Número de Convidados:</label>
+    <select id="numberOfGuests" name="numberOfGuests" onchange="generateGuestFields()">
+      <option value="0">Nenhum</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select><br><br>
+
+    <div id="guestFieldsContainer"></div><br><br>
+
+    <label for="totalCost">Valor Total:</label>
+    <input type="text" id="totalCost" name="totalCost" value="R$ 60,00" readonly><br><br>
+
+    <label>Forma de Pagamento:</label><br>
+    <input type="radio" id="pix" name="paymentMethod" value="PIX">
+    <label for="pix">PIX (chave: 7eaa245a-7559-467c-8a5e-bf518ca9774c)</label><br>
+    <input type="radio" id="money" name="paymentMethod" value="Dinheiro">
+    <label for="money">Dinheiro - Magna ou César</label><br>
+    <input type="radio" id="card" name="paymentMethod" value="Cartão">
+    <label for="card">Cartão - Templo</label><br><br>
+
+    <input type="submit" value="Enviar">
+  </form>
+
+  <script>
+    function generateGuestFields() {
+      var numberOfGuests = document.getElementById("numberOfGuests").value;
+      var guestFieldsContainer = document.getElementById("guestFieldsContainer");
+      guestFieldsContainer.innerHTML = ""; // Limpa quaisquer campos anteriores
+
+      if (numberOfGuests > 0) {
+        for (var i = 0; i < numberOfGuests; i++) {
+          var guestNumber = i + 1;
+          var guestNameLabel = document.createElement("label");
+          guestNameLabel.setAttribute("for", "guestName" + guestNumber);
+          guestNameLabel.textContent = "Nome do Convidado " + guestNumber + ":";
+          guestFieldsContainer.appendChild(guestNameLabel);
+
+          var guestNameInput = document.createElement("input");
+          guestNameInput.setAttribute("type", "text");
+          guestNameInput.setAttribute("id", "guestName" + guestNumber);
+          guestNameInput.setAttribute("name", "guestName" + guestNumber);
+          guestFieldsContainer.appendChild(guestNameInput);
+
+          var guestTypeLabel = document.createElement("label");
+          guestTypeLabel.setAttribute("for", "guestType" + guestNumber);
+          guestTypeLabel.textContent = "Tipo do Convidado " + guestNumber + ":";
+          guestFieldsContainer.appendChild(guestTypeLabel);
+
+          var guestTypeSelect = document.createElement("select");
+          guestTypeSelect.setAttribute("id", "guestType" + guestNumber);
+          guestTypeSelect.setAttribute("name", "guestType" + guestNumber);
+          guestTypeSelect.setAttribute("onchange", "calculateTotalCost()");
+          var option1 = document.createElement("option");
+          option1.setAttribute("value", "menor5");
+          option1.textContent = "Criança menor que 5 anos";
+          var option2 = document.createElement("option");
+          option2.setAttribute("value", "entre5e10");
+          option2.textContent = "Criança entre 5 e 10 anos";
+          var option3 = document.createElement("option");
+          option3.setAttribute("value", "maior10ouadulto");
+          option3.textContent = "Criança acima de 10 anos ou adulto";
+          guestTypeSelect.appendChild(option1);
+          guestTypeSelect.appendChild(option2);
+          guestTypeSelect.appendChild(option3);
+          guestFieldsContainer.appendChild(guestTypeSelect);
+
+          guestFieldsContainer.appendChild(document.createElement("br"));
+          guestFieldsContainer.appendChild(document.createElement("br"));
+        }
+      }
+
+      calculateTotalCost();
+    }
+
+    function calculateTotalCost() {
+      var numberOfGuests = parseInt(document.getElementById("numberOfGuests").value);
+      var totalCostInput = document.getElementById("totalCost");
+      var totalCost = 60; // Valor base para o(a) responsável
+
+      for (var i = 1; i <= numberOfGuests; i++) {
+        var guestType = document.getElementById("guestType" + i).value;
+        if (guestType === "entre5e10") {
+          totalCost += 30;
+        } else if (guestType === "maior10ouadulto") {
+          totalCost += 60;
+        }
+      }
+
+      totalCostInput.value = "R$ " + totalCost.toFixed(2);
+    }
+  </script>
+</body>
+</html>
